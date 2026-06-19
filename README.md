@@ -4,23 +4,21 @@ An interactive application where users can search for a country and view details
 
 ✨ Features
 
-🔎 Search for a country using name or ISO code
+- Search for a country using name
 
-📊 View details: capital, currency, languages, population, region, flag, timezone
+- View details: capital, currency, languages, population, region, flag, timezone
 
-🤖 AI-generated guides: travel, study, relocation tips (powered by Gemini API)
+- AI-generated guides: travel, study, relocation tips (powered by Gemini API)
 
-⚖️ Country comparison: side-by-side comparison of two countries
+- Country comparison: side-by-side comparison of two countries
 
-📝 Before you travel checklist: automatically generated based on country info
+- Before you travel checklist: automatically generated based on country info
 
-⏰ Timezone difference calculator
+- Timezone difference calculator
 
-⭐ Save favourites: country profiles, comparison results, and relocation guides stored locally
+- Error handling: unknown countries, missing API fields, invalid input, failed API requests
 
-🛡️ Error handling: unknown countries, missing API fields, invalid input, failed API requests
-
-✅ Validation: country names, codes, and timezone formats
+- Validation: country names, codes, and timezone formats
 
 🏗️ Architecture
 
