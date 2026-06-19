@@ -10,9 +10,11 @@ import os
 
 # Class responsible for fetching country data from REST Countries API
 class CountryAPIClient:
+    def __init__(self):
+        pass
 
     # Base URL for the API (endpoint for searching countries by name)
-    BASE_URL = "https://restcountries.com/v3.1/name/"
+    BASE_URL = "https://api.restcountries.com/countries/v5?q="
 
     # Method to get country details using country name
     def get_country(self, country_name):
@@ -23,10 +25,10 @@ class CountryAPIClient:
 
         try:
             # Create full API URL by adding the country name
-            url = f"{self.BASE_URL}{country_name.strip()}"
+            url = f"{self.BASE_URL}{country_name.strip().lower()}"
 
             # Send GET request to the API (timeout prevents long waiting)
-            response = requests.get(url, timeout=5)
+            response = requests.get(url, headers={'Authorization': 'Bearer rc_live_64943edeed9f4dc4a7c27bd68f3cd8e5'}, timeout=5)
 
             # Raise error if response status is not 200 (success)
             response.raise_for_status()
@@ -35,40 +37,21 @@ class CountryAPIClient:
             data = response.json()
 
             # Get the first result (API returns a list)
-            country = data[0]
+            country = data['data']['objects'][0]
 
-            # Get currencies dictionary (or empty if missing)
-            currencies = country.get("currencies", {})
-
-            # Get languages dictionary (or empty if missing)
-            languages = country.get("languages", {})
-
-            # Return cleaned and structured country data
-            return {
-                # Get country name safely (avoid missing key error)
-                "name": country.get("name", {}).get("common", "N/A"),
-
-                # Capital is a list → take first item
-                "capital": country.get("capital", ["N/A"])[0],
-
-                # Population value
-                "population": country.get("population", "N/A"),
-
-                # Region (Africa, Europe, etc.)
-                "region": country.get("region", "N/A"),
-
-                # Get currency name safely
-                "currency": list(currencies.values())[0]["name"] if currencies else "N/A",
-
-                # Join all languages into one string
-                "languages": ", ".join(languages.values()) if languages else "N/A",
-
-                # Get first timezone from list
-                "timezone": country.get("timezones", ["N/A"])[0],
-
-                # Get flag image URL
-                "flag": country.get("flags", {}).get("png", "")
-            }
+            country_info = {
+                "name": country["names"]["common"],
+                "capital": country["capitals"][0]["name"],
+                "population": country["population"],
+                "region": country["region"],
+                "currency": country["currencies"][0]["name"],
+                "languages": ", ".join(
+                        lang["name"] for lang in country["languages"]
+                                    ),
+                "timezone": ", ".join(country["timezones"]),
+                "flag": country["flag"]["url_png"]
+                    }
+            return country_info
 
         # If country is not found (404 error)
         except requests.exceptions.HTTPError:
