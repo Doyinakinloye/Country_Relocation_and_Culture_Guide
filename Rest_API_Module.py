@@ -21,13 +21,14 @@ class CountryAPIClient:
 
         # Check if input is empty or just spaces
         if not country_name or not country_name.strip():
-            raise ValueError("Invalid country name.")  # Raise error if invalid
+            # raises an error if invalid
+            raise ValueError("Invalid country name.") 
 
         try:
             # Create full API URL by adding the country name
             url = f"{self.BASE_URL}{country_name.strip().lower()}"
 
-            # Send GET request to the API (timeout prevents long waiting)
+            # Send GET request to the API
             response = requests.get(url, headers={'Authorization': 'Bearer rc_live_64943edeed9f4dc4a7c27bd68f3cd8e5'}, timeout=5)
 
             # Raise error if response status is not 200 (success)
